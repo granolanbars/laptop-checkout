@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actions Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Main Content -->
+    <div class="container d-flex flex-column align-items-center justify-content-center">
+        <div class="text-center mb-4 pt-5">
+            <h1>Laptop Checkout</h1>
+        </div>
+        
+        <!-- Centered Buttons -->
+        <div class="d-flex flex-row mb-4 pt-5">
+            <button class="btn btn-primary btn-lg mx-2" onclick="location.href='{% url 'checkout' %}'">Checkout</button>
+            <button class="btn btn-secondary btn-lg mx-2" onclick="location.href='{% url 'checkin' %}'">Check-In</button>
+        </div>
+        
+        <!-- Button Below -->
+        <button class="btn btn-success btn-lg" onclick="location.href='{% url 'create_account' %}'">Create Account</button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

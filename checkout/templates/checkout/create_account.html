@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Create Account</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <div class="container mt-5">
+        <h1 class="mb-4">Create a New Account</h1>
+        <form method="post" class="{% url 'create_account' %}">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <!-- Field Label -->
+                    <label for="{{ field.id_for_label }}" class="font-weight-bold">{{ field.label }}</label>
+        
+                    <!-- Field Input -->
+                    {{ field }}
+        
+                    <!-- Error Messages for the Field -->
+                    {% if field.errors %}
+                        <small class="text-danger">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Create Account</button>
+            <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'actions' %}'">Back</button>
+        </form>
+        
+    <div class="message">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {%endfor%}
+        {% endif %}
+    </div>
+    </div>
+    
+    {% if redirect_url %}
+    <script>
+        setTimeout(function() {
+            window.location.href = "{{ redirect_url }}";
+        }, 3000);
+    </script>
+    {% endif %}
+</body>
+</html>

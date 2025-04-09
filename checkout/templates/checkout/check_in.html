@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Check-In</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <div class="container mt-5">
+        <form method="post" class="form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <!-- Field Label -->
+                    <label for="{{ field.id_for_label }}" class="font-weight-bold">{{ field.label }}</label>
+        
+                    <!-- Field Input -->
+                    {{ field }}
+        
+                    <!-- Error Messages for the Field -->
+                    {% if field.errors %}
+                        <small class="text-danger">
+                            {% for error in field.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        
+            <button type="submit" class="btn btn-primary">Check-In</button>
+            <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'actions' %}'">Back</button>
+        </form>
+
+        <div class="message">
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{message }}</p>
+                {%endfor%}
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if redirect_url %}
+    <script>
+        setTimeout(function() {
+            window.location.href = "{{ redirect_url }}";
+        }, 3000);
+    </script>
+    {% endif %}
+
+    <!-- Bootstrap JS and dependencies -->
+     <script>
+        let scannerInput = "";
+            let scanning = false;
+            let lastKeyTime = Date.now()
+            const SCAN_THRESHOLD = 8; // Time (ms) below which inputs are considered scanner data
+            document.addEventListener("keydown", function (event) {
+                const currentTime = Date.now();
+                const timeDifference = currentTime - lastKeyTime;
+                lastKeyTime = currentTime;
+
+                //check for scan input and if not scanning yet
+                if (!scanning && timeDifference < SCAN_THRESHOLD) {
+                    start_scan = Date.now();
+                    scanning = true;
+                    console.log("START SCANNING")
+                    scannerInput = scannerInput.slice(-1)
+                    document.body.focus()
+                    //check for fast inputs after initial inputs
+                } else if (timeDifference > SCAN_THRESHOLD) {
+                    scanning = false;
+                    scannerInput = "";
+                    console.log("STOP SCANNING")
+                }
+                //Check if scanner is still inputing
+                if (event.key != "ArrowDown") {
+                    scannerInput += event.key;
+                } else if (scanning) {
+                    //add scannerInput to field
+                    if (/^\d/.test(scannerInput)) {
+                        document.body.focus()
+                        document.getElementById("computer_id").value = scannerInput;
+                    }
+
+                    // Reset scanner state
+                    scannerInput = "";
+                    scanning = false;
+                } 
+                //prevent double dipping on scanner input
+                if (scanning) {
+                    event.preventDefault()
+                }
+            });
+     </script>
+</body>
+</html>
